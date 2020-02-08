@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bash script that displays Holberton School 10 times.
+# Bash script that displays the content of the current directory in a list format
 for i in *
 do
 	echo "$i" | cut -d"-" -f2

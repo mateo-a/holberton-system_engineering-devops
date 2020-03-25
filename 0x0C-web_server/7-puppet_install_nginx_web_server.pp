@@ -3,6 +3,10 @@ package { 'nginx':
   ensure => installed
 }
 
+file {'/var/www/html/index.html':
+    content => 'Holberton School'
+}
+
 file_line { 'redirect':
   ensure => 'present',
   path   => '/etc/nginx/sites-available/default',
@@ -10,12 +14,7 @@ file_line { 'redirect':
   line   => 'rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;'
 }
 
-file { '/var/www/html/index.html':
-  content => 'Holberton School'
-}
-
 service { 'nginx':
   ensure  => running,
-  enable  => true,
   require => Package['nginx']
 }

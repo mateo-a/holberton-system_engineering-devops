@@ -1,6 +1,6 @@
 # Manifest to add a custom HTTP header in Nginx with Puppet
 exec { 'update':
-  command => 'apt-get update -y',
+  command => 'sudo apt-get update -y',
   path    => ['/usr/bin', '/bin'],
   returns => [0,1]
 }

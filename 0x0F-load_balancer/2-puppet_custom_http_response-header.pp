@@ -6,15 +6,15 @@ package {'nginx':
          ensure => 'present',
          require => Exec['apt-get update'],
 }
-file_line { 'http_header':
+-> file_line { 'http_header':
   path  => '/etc/nginx/nginx.conf'
   match => 'http {',
   line  => "http {\n\tadd_header X-Served-By \"${hostname}\";",
 }
-service { 'nginx':
+->service { 'nginx':
   ensure  => running,
   require => Package['nginx'],
 }
-exec {'restart nginx':
+-> exec {'restart nginx':
   command => '/usr/sbin/service nginx restart',
 }

@@ -6,7 +6,7 @@ exec { 'update':
 }
 
 exec { 'install':
-  require => Exec['update],
+  require => Exec['update'],
   command => 'apt-get install nginx -y',
   path    => ['/usr/bin', '/bin'],
   returns => [0,1]

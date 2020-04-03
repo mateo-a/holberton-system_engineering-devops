@@ -1,24 +1,27 @@
 # Manifest to add a custom HTTP header in Nginx with Puppet
-exec { 'apt-get update':
-  command => '/usr/bin/apt-get update -y',
+exec { 'update':
+  command => 'apt-get update -y',
+  path    => ['/usr/bin', '/bin'],
   returns => [0,1]
 }
 
-package { 'nginx':
-         ensure => 'present',
-         require => Exec['apt-get update']
+exec { 'install':
+  require => Exec['update],
+  command => 'apt-get install nginx -y',
+  path    => ['/usr/bin', '/bin'],
+  returns => [0,1]
 }
 
 exec { 'header':
-     require => Exec['apt-get update'],
-     path    => '/usr/bin:/bin',
-     command => 'sed -i '/server_name _;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default',
-     returns => [0,1]
+  require => Exec['install'],
+  command => 'sed -i "s/server_name _;/server_name _;\n\tadd_header X-Served-By \$hostname;/" /etc/nginx/sites-enabled/default',
+  path    => ['/usr/bin', '/bin'],
+  returns => [0,1]
 }
 
-exec { 'start nginx':
-     require => Exec['header'],
-     path    => '/usr/bin:/bin',
-     command => 'service nginx restart',
-     returns => [0,1]
+exec { 'restart':
+  require => Exec['header'],
+  command => 'service nginx restart',
+  path    => ['/usr/bin', '/bin', '/usr/sbin'],
+  returns => [0,1]
 }
